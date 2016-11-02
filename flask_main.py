@@ -73,10 +73,10 @@ def index():
 
 
 # We don't have an interface for creating memos yet
-# @app.route("/create")
-# def create():
-#     app.logger.debug("Create")
-#     return flask.render_template('create.html')
+@app.route("/create")
+def create():
+  app.logger.debug("Create")
+  return flask.render_template('create.html')
 
 
 @app.errorhandler(404)
