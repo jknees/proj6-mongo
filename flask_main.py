@@ -56,7 +56,25 @@ except:
     print("Failure opening database.  Is Mongo running? Correct password?")
     sys.exit(1)
 
+###
+# Insert
+###
 
+@app.route("/post_memo", methods=['POST'])
+def post_memo():
+  date = request.form['date']
+  text=request.form['textArea']
+  print("Local time: " + str(tz.tzlocal()))
+  print("Input time: " + str(date))  
+  arrow_date = arrow.get(date, "YYYY-MM-DD").replace(tzinfo=tz.tzlocal())
+
+  record = { "type": "dated_memo",
+             "date": arrow_date.isoformat(),
+             "text": text
+           }
+  collection.insert(record)
+  app.logger.debug("Arrow time: " + str(record['date']))
+  return index()
 
 ###
 # Pages
@@ -103,7 +121,9 @@ def humanize_arrow_date( date ):
     """
     try:
         then = arrow.get(date).to('local')
-        now = arrow.utcnow().to('local')
+        now = arrow.utcnow().to('local').replace(hour=0).replace(minute=0)
+        print("Then: " + str(then))
+        print("Now: " + str(now))
         if then.date() == now.date():
             human = "Today"
         else: 
@@ -127,7 +147,7 @@ def get_memos():
     """
     records = [ ]
     for record in collection.find( { "type": "dated_memo" } ):
-        record['date'] = arrow.get(record['date']).isoformat()
+        record['date'] = humanize_arrow_date(arrow.get(record['date']))
         del record['_id']
         records.append(record)
     return records 
