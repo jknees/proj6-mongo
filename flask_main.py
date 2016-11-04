@@ -21,6 +21,8 @@ from flask import url_for
 import json
 import logging
 
+from bson import ObjectId
+
 # Date handling 
 import arrow    # Replacement for datetime, based on moment.js
 # import datetime # But we may still need time
@@ -77,6 +79,18 @@ def post_memo():
   return index()
 
 ###
+# Delete
+###
+
+@app.route("/delete", methods=['POST'])
+def delete():
+  list = request.form.getlist('vals')
+  print(list)
+  for val in list:
+    collection.remove({'_id' : ObjectId(val)})
+  return index()
+
+###
 # Pages
 ###
 
@@ -122,14 +136,14 @@ def humanize_arrow_date( date ):
     try:
         then = arrow.get(date).to('local')
         now = arrow.utcnow().to('local').replace(hour=0).replace(minute=0)
-        print("Then: " + str(then))
-        print("Now: " + str(now))
         if then.date() == now.date():
             human = "Today"
         else: 
             human = then.humanize(now)
             if human == "in a day":
                 human = "Tomorrow"
+            elif human == "a day ago":
+                human = "Yesterday"
     except: 
         human = date
     return human
@@ -147,10 +161,11 @@ def get_memos():
     """
     records = [ ]
     for record in collection.find( { "type": "dated_memo" } ):
-        record['date'] = humanize_arrow_date(arrow.get(record['date']))
-        del record['_id']
+        record['date'] = arrow.get(record['date'])
+        #del record['_id']
         records.append(record)
-    return records 
+    sorted_records = sorted(records, key=lambda k: k['date'])
+    return sorted_records
 
 
 if __name__ == "__main__":

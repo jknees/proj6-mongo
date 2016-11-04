@@ -37,10 +37,12 @@
 {% endwith %}
 
 <h1>Memos</h1>
-
+<form action="{{ url_for('delete')}}" method="post">
 {% if g.memos %}
     {% for memo in g.memos %}
   <div class="memo">
+  <div class="checkbox">
+  <input type="checkbox" value='{{ memo._id }}' name="vals"></input>
   <div class="row">
   <div class="col-md-2">
     {{ memo.date | humanize }}
@@ -49,13 +51,16 @@
     {{ memo.text }}
   </div>
   </div> <!-- row -->
+  </div> <!-- checkbox -->
   </div> <!-- memo -->
   {% endfor %}
 {% else %}
   <p>No memos for you. </p>  
 {% endif %}
+<input type="submit" value="Delete selected">
+</form>
 
- 
+<button type="button" onclick="location.href='{{ url_for('create') }}'">Create</button>
 
 </div> <!-- container -->
 </body>
