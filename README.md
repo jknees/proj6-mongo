@@ -1,6 +1,10 @@
 # proj6-mongo
 Simple list of dated memos kept in MongoDB database
 
+
+Editor: Jeffrey Knees, jknees@uoregon.edu
+Author: M. Young
+
 ## What is here
 
 A simple Flask app that displays all the dated memos it finds in a MongoDB database.
@@ -23,7 +27,7 @@ in it:
 
 
 
-## Functionality you'll add
+## Functionality
 
 The user should be able to add dated memos, either from the same index page or from a separate page. 
 Memos should be displayed in date order. 
@@ -51,4 +55,11 @@ In Python, the pymongo API works with both versions of MongoDB, so
 it's only the initial setup where you have to be  
 careful to use the right version-specific commands. 
 
+* git clone https://github.com/jknees/proj6-mongo
+* cd <>
+* make configure
+* make run
 
+## Testing
+
+* make test

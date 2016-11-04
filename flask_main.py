@@ -170,6 +170,9 @@ def get_memos():
     sorted_records = sorted(records, key=lambda k: k['date'])
     return sorted_records
 
+def delete_database():
+  collection.remove()
+
 
 if __name__ == "__main__":
     app.debug=CONFIG.DEBUG
