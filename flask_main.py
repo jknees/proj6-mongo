@@ -65,18 +65,18 @@ except:
 @app.route("/post_memo", methods=['POST'])
 def post_memo():
   date = request.form['date']
-  text=request.form['textArea']
-  print("Local time: " + str(tz.tzlocal()))
-  print("Input time: " + str(date))  
-  arrow_date = arrow.get(date, "YYYY-MM-DD").replace(tzinfo=tz.tzlocal())
+  text=request.form['textArea']  
+  insert(date, text)
+  return index()
 
+def insert(date, text):
+  arrow_date = arrow.get(date, "YYYY-MM-DD").replace(tzinfo=tz.tzlocal())
+  
   record = { "type": "dated_memo",
              "date": arrow_date.isoformat(),
              "text": text
            }
   collection.insert(record)
-  app.logger.debug("Arrow time: " + str(record['date']))
-  return index()
 
 ###
 # Delete
@@ -85,10 +85,13 @@ def post_memo():
 @app.route("/delete", methods=['POST'])
 def delete():
   list = request.form.getlist('vals')
-  print(list)
+  remove(list)
+  return index()
+
+def remove(list):
   for val in list:
     collection.remove({'_id' : ObjectId(val)})
-  return index()
+
 
 ###
 # Pages
