@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Create</title>
+<link rel="stylesheet" href="/static/css/memos.css" />
+</head>
+<body>
+<div class="container">
+<form method="post" action="{{ url_for('post_memo') }}">
+  Date:
+  <input type="date" name="date">
+  <br>
+  <textarea id="textArea" name="textArea" cols="50" rows="6" placeholder="Enter text here"></textarea>
+  <br>
+  <input type="submit">
+</form>
+
+
+
+
+</div>
+
+
+</body>
+
+
+</html>
